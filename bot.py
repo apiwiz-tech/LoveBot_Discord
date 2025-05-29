@@ -20,6 +20,8 @@ GUILD_ID = int(os.getenv('GUILD_ID'))
 intents = discord.Intents.default()
 intents.messages = True
 intents.guilds = True
+intents.message_content = True
+
 
 bot = commands.Bot(command_prefix='@LoveBot ', intents=intents)
 memory = MemoryStore()
