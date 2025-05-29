@@ -5,7 +5,7 @@ openai.api_key = os.getenv('OPENAI_KEY')
 
 def analyze_message(text):
     response = openai.ChatCompletion.create(
-        model='gpt-4',
+        model='gpt-3.5-turbo',
         messages=[
             {'role': 'system', 'content': 'Analyze emotional tone and personality traits.'},
             {'role': 'user', 'content': text}
