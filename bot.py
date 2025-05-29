@@ -1,6 +1,9 @@
 import os
 import discord
 from discord.ext import commands, tasks
+from aiohttp import web
+import asyncio
+
 from analyzer import (
     analyze_message,
     detect_argument_with_gpt,
@@ -67,7 +70,6 @@ async def weekly_summary():
     if not guild:
         print(f"Guild with ID {GUILD_ID} not found.")
         return
-    # Find the first text channel where the bot has permissions to send messages
     channel = next((ch for ch in guild.text_channels if ch.permissions_for(guild.me).send_messages), None)
     if channel is None:
         print("No suitable channel found to send weekly summary.")
@@ -75,5 +77,26 @@ async def weekly_summary():
     summary_text = summarize_week(memory)
     await channel.send(f"📅 **Weekly Relationship Recap**\n{summary_text}")
 
+# --- HTTP server for Render health check ---
+
+PORT = int(os.environ.get("PORT", 8000))
+
+async def handle(request):
+    return web.Response(text="Bot is running")
+
+async def start_http_server():
+    app = web.Application()
+    app.router.add_get("/", handle)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, "0.0.0.0", PORT)
+    await site.start()
+
+# --- Main async entry point to run bot and HTTP server concurrently ---
+
+async def main():
+    await start_http_server()
+    await bot.start(TOKEN)
+
 if __name__ == '__main__':
-    bot.run(TOKEN)
+    asyncio.run(main())
