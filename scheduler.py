@@ -1,5 +1,5 @@
 ### `scheduler.py`
-```python
+python
 # Using APScheduler for cron-like jobs
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from analyzer import summarize_week
@@ -18,4 +18,4 @@ def weekly_job():
 
 scheduler.add_job(weekly_job, 'interval', days=7)
 scheduler.start()
-```
+
