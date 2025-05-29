@@ -14,10 +14,6 @@ def analyze_message(text):
     return response.choices[0].message.content
 
 def detect_argument_with_gpt(messages):
-    """
-    messages: list of strings (recent chat messages)
-    Returns True if GPT detects argument or tension.
-    """
     conversation = '\n'.join(messages)
     prompt = (
         "You are a relationship AI. Given this conversation, "
@@ -32,10 +28,6 @@ def detect_argument_with_gpt(messages):
     return answer == 'YES'
 
 def generate_intervention_with_gpt(messages):
-    """
-    messages: list of strings (recent chat messages)
-    Returns a calming, empathetic intervention message.
-    """
     conversation = '\n'.join(messages)
     prompt = (
         "You are a compassionate AI relationship counselor. "
@@ -50,10 +42,6 @@ def generate_intervention_with_gpt(messages):
     return response.choices[0].message.content.strip()
 
 def explain_conflict_with_gpt(messages):
-    """
-    messages: list of strings (recent chat messages)
-    Returns a detailed explanation of the conflict and advice.
-    """
     conversation = '\n'.join(messages)
     prompt = (
         "You are an expert relationship counselor AI. "
@@ -67,4 +55,26 @@ def explain_conflict_with_gpt(messages):
     )
     return response.choices[0].message.content.strip()
 
-# Keep your summarize_week and highlight_sweet from before
+def summarize_week(memory):
+    msgs = memory.get_recent(days=7)
+    content = '\n'.join(m.content for m in msgs)
+    resp = openai.ChatCompletion.create(
+        model='gpt-4',
+        messages=[
+            {'role': 'system', 'content': 'Summarize the key topics and emotions.'},
+            {'role': 'user', 'content': content}
+        ]
+    )
+    return resp.choices[0].message.content
+
+def highlight_sweet(memory):
+    msgs = memory.get_all()
+    content = '\n'.join(m.content for m in msgs)
+    resp = openai.ChatCompletion.create(
+        model='gpt-4',
+        messages=[
+            {'role': 'system', 'content': 'Identify the most affectionate and emotional messages.'},
+            {'role': 'user', 'content': content}
+        ]
+    )
+    return resp.choices[0].message.content
