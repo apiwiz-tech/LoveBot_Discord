@@ -36,32 +36,32 @@ async def on_message(message):
 
     # Log and analyze
     memory.log_message(message)
-    analysis = analyze_message(message.content)
+    analysis = await analyze_message(message.content)
     memory.store_analysis(message, analysis)
 
     recent_msgs = memory.get_last_messages_content(limit=10)
 
     # Detect argument & intervene
-    if detect_argument_with_gpt(recent_msgs):
-        intervention = generate_intervention_with_gpt(recent_msgs)
+    if await detect_argument_with_gpt(recent_msgs):
+        intervention = await generate_intervention_with_gpt(recent_msgs)
         await message.channel.send(intervention)
 
     await bot.process_commands(message)
 
 @bot.command(name='summary')
 async def summary(ctx):
-    summary_text = summarize_week(memory)
+    summary_text = await summarize_week(memory)
     await ctx.send(f"Weekly Summary:\n{summary_text}")
 
 @bot.command(name='highlights')
 async def highlights(ctx):
-    highlights_text = highlight_sweet(memory)
+    highlights_text = await highlight_sweet(memory)
     await ctx.send(f"Sweet Moments:\n{highlights_text}")
 
 @bot.command(name='why-fight')
 async def why_fight(ctx):
     recent_msgs = memory.get_last_messages_content(limit=10)
-    explanation = explain_conflict_with_gpt(recent_msgs)
+    explanation = await explain_conflict_with_gpt(recent_msgs)
     await ctx.send(f"Conflict Analysis:\n{explanation}")
 
 @tasks.loop(hours=168)  # 168 hours = 7 days
@@ -74,7 +74,7 @@ async def weekly_summary():
     if channel is None:
         print("No suitable channel found to send weekly summary.")
         return
-    summary_text = summarize_week(memory)
+    summary_text = await summarize_week(memory)
     await channel.send(f"📅 **Weekly Relationship Recap**\n{summary_text}")
 
 # --- HTTP server for Render health check ---
