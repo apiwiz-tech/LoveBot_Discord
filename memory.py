@@ -1,6 +1,6 @@
 
 ### `memory.py`
-```python
+python
 import sqlite3
 from datetime import datetime, timedelta
 
@@ -47,4 +47,3 @@ class MemoryStore:
     def explain_conflict(self):
         # placeholder
         return "It seems you're both frustrated; try active listening and acknowledging feelings."
-```
