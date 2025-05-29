@@ -1,5 +1,5 @@
 ### `analyzer.py`
-```python
+python
 import os
 import openai
 
@@ -40,4 +40,4 @@ def highlight_sweet(memory):
                   {'role': 'user', 'content': content}]
     )
     return resp.choices[0].message.content
-```
+
