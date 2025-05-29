@@ -1,5 +1,5 @@
 ### `bot.py`
-```python
+python
 import os
 import discord
 from discord.ext import commands, tasks
